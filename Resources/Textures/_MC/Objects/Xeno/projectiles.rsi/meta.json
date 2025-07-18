@@ -94,6 +94,16 @@
       ]
     },
     {
+      "name": "xeno_fireball",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
       "name": "xeno_toxic"
     }
   ]

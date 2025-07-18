@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": null,
+  "copyright": null,
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "fireball"
+    },
+    {
+      "name": "fireslash"
+    },
+    {
+      "name": "infernaltrigger"
+    },
+    {
+      "name": "inferno"
+    },
+    {
+      "name": "whirlwind"
+    }
+  ]
+}

@@ -4,6 +4,7 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: RMCFireImmunityBypass
   - type: Transform
     anchored: true
   - type: Physics
