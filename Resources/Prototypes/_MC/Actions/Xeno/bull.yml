@@ -11,3 +11,17 @@
       state: bull_ready_charge
     event: !type:MCXenoChargeActionEvent
     useDelay: 0.1
+
+- type: entity
+  parent: ActionXenoBase
+  id: MCActionXenoInferno
+  name: Инферно
+  description: Инферно
+  components:
+  - type: InstantAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _MC/Interface/Xeno/Actions/bull.rsi
+      state: bull_ready_charge
+    event: !type:MCXenoInfernoActionEvent
+    useDelay: 18

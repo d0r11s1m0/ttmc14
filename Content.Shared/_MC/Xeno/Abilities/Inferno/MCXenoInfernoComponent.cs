@@ -1,0 +1,29 @@
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
+using Robust.Shared.Audio;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
+
+namespace Content.Shared._MC.Xeno.Abilities.Inferno;
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class MCXenoInfernoComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 PlasmaCost = 50;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan InfernoDelay = TimeSpan.FromSeconds(0.5);
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId? SelfEffect;
+
+    [DataField]
+    public DamageSpecifier Damage = new();
+
+    [DataField, AutoNetworkedField]
+    public float Range = 2.5f;
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_footstep_charge1.ogg");
+}

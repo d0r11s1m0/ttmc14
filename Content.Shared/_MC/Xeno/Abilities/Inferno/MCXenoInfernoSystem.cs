@@ -1,0 +1,152 @@
+using Content.Shared.DoAfter;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Coordinates;
+using Content.Shared.Damage;
+using Content.Shared.Popups;
+using Content.Shared._RMC14.Atmos;
+using Content.Shared._RMC14.Map;
+using Content.Shared.Maps;
+using Content.Shared.Atmos.Components;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Plasma;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
+using Robust.Shared.Map;
+using System.Numerics;
+using Robust.Shared.Enums;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Physics.Components;
+using Content.Shared.Tag;
+using Content.Shared.Interaction;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Collision.Shapes;
+using static Content.Shared.Physics.CollisionGroup;
+using Content.Shared.Examine;
+
+namespace Content.Shared._MC.Xeno.Abilities.Inferno;
+
+public sealed class MCXenoInfernoSystem : EntitySystem
+{
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly EntityLookupSystem _entityLookup = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IMapManager _map = default!;
+    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly TurfSystem _turf = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly TagSystem _tag = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly SharedInteractionSystem _interaction = default!;
+    [Dependency] private readonly ExamineSystemShared _examine = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<MCXenoInfernoComponent, MCXenoInfernoActionEvent>(OnAction);
+        SubscribeLocalEvent<MCXenoInfernoComponent, MCXenoInfernoDoAfterEvent>(OnXenoInfernoDoAfter);
+    }
+
+    private readonly HashSet<Entity<MobStateComponent>> _receivers = new();
+
+    private void OnAction(Entity<MCXenoInfernoComponent> xeno, ref MCXenoInfernoActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!_xenoPlasma.HasPlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
+            return;
+
+        var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.InfernoDelay, new MCXenoInfernoDoAfterEvent(), xeno, xeno)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = false,
+            ForceVisible = true,
+            CancelDuplicate = true,
+            DuplicateCondition = DuplicateConditions.SameEvent
+        };
+
+        if (_doAfter.TryStartDoAfter(doAfter))
+            args.Handled = true;
+    }
+
+    private void OnXenoInfernoDoAfter(Entity<MCXenoInfernoComponent> xeno, ref MCXenoInfernoDoAfterEvent args)
+    {
+        if (args.Handled || args.Cancelled)
+            return;
+
+        if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
+            return;
+
+        if (!TryComp(xeno, out TransformComponent? xform))
+            return;
+
+        args.Handled = true;
+
+        _audio.PlayPvs(xeno.Comp.Sound, xeno);
+        if (_net.IsServer && xeno.Comp.SelfEffect is not null)
+            SpawnAttachedTo(xeno.Comp.SelfEffect, xeno.Owner.ToCoordinates());
+
+        _receivers.Clear();
+        _entityLookup.GetEntitiesInRange(xform.Coordinates, xeno.Comp.Range, _receivers);
+
+        var transform = Transform(xeno);
+        var center = transform.Coordinates;
+
+        for (var x = -2; x <= 2; x++)
+        {
+            for (var y = -2; y <= 2; y++)
+            {
+                var offsetPosition = center.Offset(new Vector2(x, y));
+
+                if (!CanPlaceFire(offsetPosition))
+                    continue;
+
+                if (!_interaction.InRangeUnobstructed(xeno.Owner, offsetPosition, xeno.Comp.Range))
+                    continue;
+
+                Spawn("RMCTileFire", offsetPosition);
+            }
+        }
+
+        foreach (var receiver in _receivers)
+        {
+            if (_mobState.IsDead(receiver))
+                continue;
+
+            if (!_xeno.CanAbilityAttackTarget(xeno, receiver))
+                continue;
+
+            var damage = _damageable.TryChangeDamage(
+                receiver,
+                _xeno.TryApplyXenoSlashDamageMultiplier(receiver, xeno.Comp.Damage),
+                origin: xeno,
+                tool: xeno);
+        }
+    }
+
+    private bool CanPlaceFire(EntityCoordinates coords)
+    {
+        if (_transform.GetGrid(coords) is not { } gridId ||
+            !TryComp(gridId, out MapGridComponent? grid))
+            return false;
+
+        var tile = _mapSystem.TileIndicesFor(gridId, grid, coords);
+        var anchored = _mapSystem.GetAnchoredEntitiesEnumerator(gridId, grid, tile);
+
+        if (_turf.IsTileBlocked(gridId, tile, Impassable | MidImpassable | HighImpassable, grid))
+            return false;
+
+        return true;
+    }
+}

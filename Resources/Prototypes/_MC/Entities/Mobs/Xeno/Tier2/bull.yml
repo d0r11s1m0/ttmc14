@@ -37,6 +37,7 @@
     - MCActionXenoRest
     - ActionXenoDevolve
     # MC
+    - MCActionXenoInferno
     - MCActionXenoToggleChargingBull
     hudOffset: -0.15,0.25
   - type: XenoEvolution
@@ -45,6 +46,10 @@
   - type: XenoDevolve
     devolvesTo:
     - MCXenoRunner
+  - type: MCXenoInferno
+    damage:
+      groups:
+        Burn: 30
   - type: MCArmor
     melee: 50
     bullet: 55
