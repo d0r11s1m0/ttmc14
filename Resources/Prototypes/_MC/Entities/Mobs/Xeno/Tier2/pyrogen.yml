@@ -39,7 +39,7 @@
     # MC
     - MCActionXenoFireball
     - MCActionXenoInferno
-    - MCActionXenoToggleChargingBull
+    - MCActionXenoFirecharge
     hudOffset: -0.15,0.25
   - type: XenoEvolution
     evolvesTo:
@@ -47,6 +47,7 @@
   - type: XenoDevolve
     devolvesTo:
     - MCXenoRunner
+  - type: MCXenoFirecharge
   - type: MCXenoInferno
     damage:
       types:
@@ -61,14 +62,14 @@
     bio: 35
     fire: 50
     acid: 35
-  #- type: RMCImmuneToIgnition
-    #bypassWhitelist:
-      #components:
-      #- MCPyrogenFireImmunityBypassComponent
-  #- type: RMCImmuneToFireTileDamage
-    #bypassWhitelist:
-      #components:
-      #- MCPyrogenFireImmunityBypassComponent
+  - type: RMCImmuneToIgnition
+    bypassWhitelist:
+      components:
+      - MCPyrogenFireImmunityBypassComponent
+  - type: RMCImmuneToFireTileDamage
+    bypassWhitelist:
+      components:
+      - MCPyrogenFireImmunityBypassComponent
   - type: MeleeWeapon
     damage:
       groups:

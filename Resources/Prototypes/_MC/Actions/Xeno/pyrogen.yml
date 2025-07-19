@@ -10,7 +10,6 @@
       sprite: _MC/Interface/Actions/Xeno/pyrogen.rsi
       state: inferno
     event: !type:MCXenoInfernoActionEvent
-    useDelay: 18
 
 - type: entity
   parent: ActionXenoBase
@@ -26,4 +25,21 @@
     event: !type:MCXenoFireballActionEvent
     range: 8
     checkCanAccess: false
-    useDelay: 15
+
+- type: entity
+  parent: ActionXenoBase
+  id: MCActionXenoFirecharge
+  name: Fire Charge (30)
+  description: Charge up to 3 tiles, attacking any organic you come across. Extinguishes the target if they were set on fire, but deals extra damage depending on how many fire stacks they have.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _MC/Interface/Actions/Xeno/pyrogen.rsi
+      state: fireslash
+    event: !type:MCXenoFirechargeActionEvent
+    range: 10
+    checkCanAccess: false
+    useDelay: 12
+  - type: XenoActionPlasma
+    cost: 30

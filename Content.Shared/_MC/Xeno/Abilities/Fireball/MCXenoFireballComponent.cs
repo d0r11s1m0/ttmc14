@@ -1,10 +1,9 @@
 using Content.Shared.FixedPoint;
-using Content.Shared.MC.Xeno.Abilities.Fireball;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared.MC.Xeno.Abilities.Fireball;
+namespace Content.Shared._MC.Xeno.Abilities.Fireball;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(MCXenoFireballSystem))]
@@ -26,5 +25,5 @@ public sealed partial class MCXenoFireballComponent : Component
     public EntProtoId Projectile = "MCXenoProjectileFireball";
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier ShootSound = new SoundPathSpecifier("/Audio/_MC/Effects/Pyrogen/fireball.ogg");
+    public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_MC/Effects/Pyrogen/fireball.ogg");
 }

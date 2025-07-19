@@ -12,7 +12,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 
-namespace Content.Shared.MC.Xeno.Abilities.Fireball;
+namespace Content.Shared._MC.Xeno.Abilities.Fireball;
 
 public sealed class MCXenoFireballSystem : EntitySystem
 {
@@ -48,7 +48,7 @@ public sealed class MCXenoFireballSystem : EntitySystem
         if (direction.Length() > xeno.Comp.Range)
             target = target.Offset(direction.Normalized() * xeno.Comp.Range);
 
-        _audio.PlayPvs(xeno.Comp.ShootSound, xeno, xeno);
+        _audio.PlayPvs(xeno.Comp.Sound, xeno);
 
         var ev = new MCXenoFireballDoAfterEvent { Coordinates = target, };
         var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.Delay, ev, xeno, args.Action) { BreakOnMove = true };
