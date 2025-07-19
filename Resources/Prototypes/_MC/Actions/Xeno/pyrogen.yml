@@ -7,7 +7,23 @@
   - type: InstantAction
     itemIconStyle: NoItem
     icon:
-      sprite: _MC/Interface/Xeno/Actions/pyrogen.rsi
+      sprite: _MC/Interface/Actions/Xeno/pyrogen.rsi
       state: inferno
     event: !type:MCXenoInfernoActionEvent
     useDelay: 18
+
+- type: entity
+  parent: ActionXenoBase
+  id: MCActionXenoFireball
+  name: Fireball (50)
+  description: Release a fireball that explodes on contact.
+  components:
+  - type: WorldTargetAction
+    itemIconStyle: NoItem
+    icon:
+      sprite: _MC/Interface/Actions/Xeno/pyrogen.rsi
+      state: fireball
+    event: !type:MCXenoFireballActionEvent
+    range: 8
+    checkCanAccess: false
+    useDelay: 15

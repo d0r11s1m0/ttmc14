@@ -24,14 +24,14 @@
     widePrimary: true
     altDisarm: false
     altHeavy: false
-  - type: RMCImmuneToIgnition
-    bypassWhitelist:
-      components:
-      - RMCFireImmunityBypass
-  - type: RMCImmuneToFireTileDamage
-    bypassWhitelist:
-      components:
-      - RMCFireImmunityBypass
+  #- type: RMCImmuneToIgnition
+    #bypassWhitelist:
+      #components:
+      #- RMCFireImmunityBypass
+  #- type: RMCImmuneToFireTileDamage
+    #bypassWhitelist:
+      #components:
+      #- RMCFireImmunityBypass
   - type: UserInterface
     interfaces:
       # MC

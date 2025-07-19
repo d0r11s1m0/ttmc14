@@ -3,35 +3,6 @@
   name: melting fire
   description: It feels cold to the touch, yet it burns.
   components:
-  - type: Sprite
-    sprite: _MC/Effects/fire.rsi
-    noRot: true
-    drawdepth: WallTops
-    layers:
-    - map: [ "base" ]
-      state: purple_3
-  - type: RMCIgniteOnCollide
-    maxStacks: 20
-    tileDamage:
-      types:
-        Heat: 0.5
-  - type: DamageOnCollide
-    damageDead: false
-    fire: true
-    damage:
-      types:
-        Heat: 10
-    ignoreResistances: true
-  - type: TileFire
-    id: MCTileFireViolet
-    extinguishInstantly: false
-  - type: GenericVisualizer
-    visuals:
-      enum.TileFireLayers.Base:
-        base:
-          One: { state: purple_1 }
-          Two: { state: purple_2 }
-          Three: { state: purple_3 }
   - type: Transform
     anchored: true
   - type: Physics
@@ -46,13 +17,39 @@
         layer:
         - MobMask
         hard: false
+  - type: Sprite
+    sprite: _MC/Effects/fire.rsi
+    noRot: true
+    drawdepth: WallTops
+    layers:
+    - map: [ "base" ]
+      state: purple_3
   - type: Clickable
   - type: InteractionOutline
   - type: EffectVisuals
-  - type: Tag
-    tags:
-    - HideContextMenu
+  - type: RMCIgniteOnCollide
+    maxStacks: 20
+    tileDamage:
+      types:
+        Heat: 0.5
+  - type: DamageOnCollide
+    damageDead: false
+    damage:
+      types:
+        Heat: 10
+    ignoreResistances: false
+  - type: TileFire
+    id: MCTileFireViolet
+    duration: 7
+    extinguishInstantly: true
   - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.TileFireLayers.Base:
+        base:
+          One: { state: purple_1 }
+          Two: { state: purple_2 }
+          Three: { state: purple_3 }
   - type: IgnorePredictionHit
   - type: RMCScorchEffectOnSpawn
     decalTag: burnt

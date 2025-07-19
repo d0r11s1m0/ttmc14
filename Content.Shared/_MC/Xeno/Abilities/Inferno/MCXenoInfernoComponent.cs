@@ -18,6 +18,9 @@ public sealed partial class MCXenoInfernoComponent : Component
     [DataField, AutoNetworkedField]
     public EntProtoId? SelfEffect;
 
+    [DataField, AutoNetworkedField]
+    public TimeSpan Cooldown = TimeSpan.FromSeconds(18);
+
     [DataField]
     public DamageSpecifier Damage = new();
 

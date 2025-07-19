@@ -6,6 +6,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Actions;
 using Content.Shared.Maps;
 using Content.Shared.Tag;
 using Content.Shared.Interaction;
@@ -23,6 +24,7 @@ public sealed class MCXenoInfernoSystem : EntitySystem
 {
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedActionsSystem _actions = default!;
     [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
@@ -76,6 +78,9 @@ public sealed class MCXenoInfernoSystem : EntitySystem
         if (!TryComp(xeno, out TransformComponent? xform))
             return;
 
+        if (!_net.IsServer)
+            return;
+
         args.Handled = true;
 
         _audio.PlayPvs(xeno.Comp.Sound, xeno);
@@ -116,6 +121,12 @@ public sealed class MCXenoInfernoSystem : EntitySystem
                 _xeno.TryApplyXenoSlashDamageMultiplier(receiver, xeno.Comp.Damage),
                 origin: xeno,
                 tool: xeno);
+        }
+
+        foreach (var (actionId, actionComp) in _actions.GetActions(xeno))
+        {
+            if (actionComp.BaseEvent is MCXenoInfernoActionEvent)
+                _actions.SetIfBiggerCooldown(actionId, xeno.Comp.Cooldown);
         }
     }
 

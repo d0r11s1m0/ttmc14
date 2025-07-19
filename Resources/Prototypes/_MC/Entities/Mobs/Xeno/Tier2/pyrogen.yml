@@ -37,6 +37,7 @@
     - MCActionXenoRest
     - ActionXenoDevolve
     # MC
+    - MCActionXenoFireball
     - MCActionXenoInferno
     - MCActionXenoToggleChargingBull
     hudOffset: -0.15,0.25
@@ -50,6 +51,7 @@
     damage:
       types:
         Heat: 10
+  - type: MCXenoFireball
   - type: MCArmor
     melee: 50
     bullet: 55
@@ -59,14 +61,14 @@
     bio: 35
     fire: 50
     acid: 35
-  - type: RMCImmuneToIgnition
-    bypassWhitelist:
-      components:
-      - MCPyrogenFireImmunityBypassComponent
-  - type: RMCImmuneToFireTileDamage
-    bypassWhitelist:
-      components:
-      - MCPyrogenFireImmunityBypassComponent
+  #- type: RMCImmuneToIgnition
+    #bypassWhitelist:
+      #components:
+      #- MCPyrogenFireImmunityBypassComponent
+  #- type: RMCImmuneToFireTileDamage
+    #bypassWhitelist:
+      #components:
+      #- MCPyrogenFireImmunityBypassComponent
   - type: MeleeWeapon
     damage:
       groups:
