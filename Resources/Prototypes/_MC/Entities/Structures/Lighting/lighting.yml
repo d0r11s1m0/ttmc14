@@ -17,7 +17,7 @@
     - state: tube1
       map: ["enum.PoweredLightLayers.Base"]
   - type: PointLight
-    color: "#FFFFFF"
+    color: "#fcfcfc"
     energy: 1
     radius: 10
     softness: 1
@@ -51,7 +51,7 @@
     - state: btube1
       map: ["enum.PoweredLightLayers.Base"]
   - type: PointLight
-    color: "#D2E3EC"
+    color: "#82c5ff"
   - type: PoweredLightVisuals
     spriteStateMap:
       Empty: btube-empty
@@ -251,6 +251,8 @@
     layers:
     - state: bbulb1
       map: ["enum.PoweredLightLayers.Base"]
+  - type: PointLight
+    color: "#82c5ff"
   - type: PoweredLightVisuals
     spriteStateMap:
       Empty: bbulb-empty
@@ -347,6 +349,8 @@
     layers:
     - state: bbulb1
       map: ["enum.PoweredLightLayers.Base"]
+  - type: PointLight
+    color: "#82c5ff"
   - type: PoweredLight
     hasLampOnSpawn: RMCLightBulbBlue
   - type: PoweredLightVisuals
