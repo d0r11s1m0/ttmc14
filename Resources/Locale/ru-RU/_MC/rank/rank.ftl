@@ -243,3 +243,8 @@ mc-rank-MCMarkIV-paygrad = Mk.IV
 mc-rank-MCMarkV-name = Mark V
 mc-rank-MCMarkV-prefix = E5
 mc-rank-MCMarkV-paygrad = Mk.V
+
+# PMC
+mc-rank-PMCGunner-name = Стрелок ЧВК
+mc-rank-PMCGunner-prefix = P1
+mc-rank-PMCGunner-paygrade = Стр. ЧВК
