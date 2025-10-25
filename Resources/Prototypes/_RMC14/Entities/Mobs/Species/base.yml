@@ -8,6 +8,7 @@
   components:
   - type: MCArmor
   - type: MCXenoToxicStacks
+  - type: MCXenoPsydrainable
   - type: Fixtures
     fixtures:
       fix1:

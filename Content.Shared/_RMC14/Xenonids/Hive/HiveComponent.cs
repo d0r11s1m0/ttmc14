@@ -73,12 +73,6 @@ public sealed partial class HiveComponent : Component
     public Dictionary<string, EntityUid> HiveTunnels = new();
 
     [DataField, AutoNetworkedField]
-    public int BurrowedLarva;
-
-    [DataField, AutoNetworkedField]
-    public int BurrowedLarvaSlotFactor = 4;
-
-    [DataField, AutoNetworkedField]
     public bool LateJoinGainLarva;
 
     [DataField, AutoNetworkedField]

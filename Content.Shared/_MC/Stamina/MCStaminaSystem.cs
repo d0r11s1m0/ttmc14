@@ -17,6 +17,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using System.Linq;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared._MC.Stamina;
 
@@ -78,9 +79,6 @@ public sealed class MCStaminaSystem : EntitySystem
             if (component.Current > component.DamageThresholds)
                 continue;
 
-            if (!TryComp<DamageableComponent>(uid, out var damageable))
-                continue;
-
             var spec = new DamageSpecifier
             {
                 DamageDict =
@@ -89,7 +87,7 @@ public sealed class MCStaminaSystem : EntitySystem
                 },
             };
 
-            _damageable.TryChangeDamage(uid, spec, true, false, damageable);
+            _damageable.TryChangeDamage(uid, spec, true, false);
         }
     }
 

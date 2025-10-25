@@ -13,4 +13,28 @@
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
   - type: CMAutomatedVendor
     jobs: [ MCFC ]
-    sections: []
+    sections:
+    - name: Essentials
+      choices:
+        MCEssentials: 1
+      entries:
+      - id: MCVendorBundleEssentialFieldCommander
+
+- type: entity
+  id: MCVendorBundleEssentialFieldCommander
+  name: Essential field commander Set
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _MC/Objects/Items/beacon.rsi
+    state: motion_1
+  - type: CMVendorBundle
+    bundle:
+    - RMCExplosivePlastic
+    - MCBeaconSupply
+    - MCBeaconOrbital
+    - MCHealthAnalyzer
+    # /obj/item/roller/medevac,
+    - MCBeaconMedevac
+    - MCWhistle
+    - MCGlassesHudHealth

@@ -9,7 +9,7 @@ using Robust.Shared.Utility;
 namespace Content.Shared._MC.Rules.Crash;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-public sealed partial class MCCrashRuleComponent : Component, IRulePlanet
+public sealed partial class MCCrashRuleComponent : Component, IRulePlanet, IRuleRecalculatePower
 {
     [DataField, AutoNetworkedField]
     public EntProtoId<IFFFactionComponent> MarineFaction = "FactionMarine";
@@ -67,12 +67,19 @@ public sealed partial class MCCrashRuleComponent : Component, IRulePlanet
     [DataField]
     public MCCrashRuleResult Result = MCCrashRuleResult.None;
 
-    // TODO: starting_squad
+    [AutoNetworkedField]
+    public bool PowerRecalculated { get; set; }
 
+    // TODO: starting_squad
     // TODO: evo_requirements
     // /datum/xeno_caste/king = 14
     // /datum/xeno_caste/queen = 10
     // /datum/xeno_caste/hivelord = 5
+}
+
+public interface IRuleRecalculatePower
+{
+    bool PowerRecalculated { get; set; }
 }
 
 [Serializable, NetSerializable]

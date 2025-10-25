@@ -1,6 +1,7 @@
 - type: entity
   id: MCXenoNoMeleeBase
   abstract: true
+  categories: [ MCContent ]
   components:
   - type: Flammable
     fireSpread: false
@@ -88,6 +89,8 @@
   id: MCXenoBase
   abstract: true
   components:
+  - type: MCXenoBiomass
+  - type: MCXenoPsydrain
   - type: ActiveInputMover
   - type: RMCImmuneToIgnition
     bypassWhitelist:

@@ -1,25 +1,36 @@
+using Content.Shared._MC;
 using Content.Shared._MC.Stamina;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Physics.Components;
 
 namespace Content.Server._MC.Stamina;
 
 public sealed class MCStaminaActiveSystem : EntitySystem
 {
+    [Dependency] private readonly IConfigurationManager _configuration = default!;
+
     [Dependency] private readonly SharedMoverController _moverController = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movementSpeedModifier = default!;
 
     [Dependency] private readonly MCStaminaSystem _mcStamina = default!;
 
+    private bool _enabled = true;
+
     public override void Initialize()
     {
+        _configuration.OnValueChanged(MCConfigVars.MCStaminaDamageOnRun, value => _enabled = value, invokeImmediately: true);
+
         SubscribeLocalEvent<MCStaminaActiveComponent, RefreshMovementSpeedModifiersEvent>(OnRefresh);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        if (!_enabled)
+            return;
 
         var query = EntityQueryEnumerator<MCStaminaComponent, MCStaminaActiveComponent, PhysicsComponent, InputMoverComponent>();
         while (query.MoveNext(out var uid, out var stamina, out var active, out var phys, out var input))
@@ -72,6 +83,9 @@ public sealed class MCStaminaActiveSystem : EntitySystem
 
     private void OnRefresh(Entity<MCStaminaActiveComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
     {
+        if (!_enabled)
+            return;
+
         if (ent.Comp.ZeroSprintLock)
         {
             args.ModifySpeed(args.WalkSpeedModifier, args.WalkSpeedModifier);

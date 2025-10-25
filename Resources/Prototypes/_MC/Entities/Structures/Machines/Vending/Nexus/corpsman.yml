@@ -99,5 +99,5 @@
     - MCAidKitAdvancedFilled
     - MCHealthAnalyzer
     - MCMedicalTweezers
-    # /obj/item/medevac_beacon
+    - MCBeaconMedevac
     # /obj/structure/bed/medevac_stretcher

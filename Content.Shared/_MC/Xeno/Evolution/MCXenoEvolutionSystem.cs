@@ -32,12 +32,14 @@ public sealed class MCXenoEvolutionSystem : EntitySystem
     private readonly HashSet<EntityUid> _climbableTemp = new();
     private readonly HashSet<EntityUid> _intersectingTemp = new();
 
+    private EntityQuery<MCXenoEvolutionAffectGainComponent> _evolutionAffectGainQuery;
     private EntityQuery<HiveMemberComponent> _hiveMemberQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        _evolutionAffectGainQuery = GetEntityQuery<MCXenoEvolutionAffectGainComponent>();
         _hiveMemberQuery = GetEntityQuery<HiveMemberComponent>();
     }
 
@@ -64,8 +66,9 @@ public sealed class MCXenoEvolutionSystem : EntitySystem
             comp.LastPointsAt = time;
             Dirty(uid, comp);
 
+            GetEvolutionGainAffect(out var gainAdditional, out var gainMultiplier);
             var points = comp.PointsPerSecond;
-            var gain =  points; // todo
+            var gain = (points + gainAdditional) * gainMultiplier;
 
             _rmcEvolution.SetPoints((uid, comp), FixedPoint2.Clamp(comp.Points + gain, 0, comp.Max));
         }
@@ -115,6 +118,22 @@ public sealed class MCXenoEvolutionSystem : EntitySystem
                 return;
 
             _popup.PopupEntity(msg, xeno, xeno, PopupType.MediumCaution);
+        }
+    }
+
+    private void GetEvolutionGainAffect(out FixedPoint2 additional, out FixedPoint2 multiplier, EntityUid? hiveEnt = null)
+    {
+        additional = 0;
+        multiplier = 1;
+
+        var query = EntityQueryEnumerator<MCXenoEvolutionAffectGainComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (hiveEnt is not null && _hiveMemberQuery.TryComp(uid, out var hiveMemberComponent) && hiveMemberComponent.Hive != hiveEnt)
+                continue;
+
+            additional += component.Additional;
+            multiplier += component.Multiplier;
         }
     }
 

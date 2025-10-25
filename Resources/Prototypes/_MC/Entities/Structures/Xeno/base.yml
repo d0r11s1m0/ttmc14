@@ -117,6 +117,8 @@
         - BulletImpassable
   - type: CollisionWake
     enabled: false
+  - type: MCXenoEvolutionAffectGain
+    multiplier: 1.5
   # - type: XenoStructureMapTracked
   # - type: TacticalMapTracked
   # - type: TacticalMapIcon

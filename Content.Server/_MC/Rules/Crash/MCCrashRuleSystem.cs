@@ -1,5 +1,6 @@
 ﻿using Content.Server._MC.Xeno.Hive;
 using Content.Server._MC.Xeno.Spawn;
+using Content.Server._RMC14.Power;
 using Content.Server.Administration.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
@@ -17,6 +18,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Coordinates;
 using Content.Shared.GameTicking;
+using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Preferences;
@@ -37,6 +39,7 @@ public sealed partial class MCCrashRuleSystem : MCRuleSystem<MCCrashRuleComponen
 
     [Dependency] private readonly XenoSystem _rmcXeno = default!;
     [Dependency] private readonly SharedXenoHiveSystem _rmcHive = default!;
+    [Dependency] private readonly RMCPowerSystem _rmcPower = default!;
 
     [Dependency] private readonly PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private readonly ShuttleSystem _shuttle = default!;
@@ -61,6 +64,22 @@ public sealed partial class MCCrashRuleSystem : MCRuleSystem<MCCrashRuleComponen
 
         SubscribeLocalEvent<MarineComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<MarineComponent, ComponentRemove>(OnCompRemove);
+    }
+
+    protected override void ActiveTick(EntityUid uid, MCCrashRuleComponent component, GameRuleComponent gameRule, float frameTime)
+    {
+        base.ActiveTick(uid, component, gameRule, frameTime);
+
+        if (component is not IRuleRecalculatePower recalculatePower)
+            return;
+
+        if (recalculatePower.PowerRecalculated)
+            return;
+
+        _rmcPower.RecalculatePower();
+
+        recalculatePower.PowerRecalculated = true;
+        Dirty(uid, component);
     }
 
     private void OnRoundEndMessage(RoundEndMessageEvent ev)
